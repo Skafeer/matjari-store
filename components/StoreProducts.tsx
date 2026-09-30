@@ -14,6 +14,7 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
+  // ── استخراج التصنيفات ──
   const productCategories = useMemo(() => {
     const cats = new Set<string>();
     products.forEach((p: any) => {
@@ -28,9 +29,11 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
     return Array.from(cats);
   }, [products]);
 
+  // ── الفلترة والترتيب ──
   const filtered = useMemo(() => {
     let result = [...products];
 
+    // Filter by category
     if (activeCategory) {
       result = result.filter((p: any) => {
         const productCats: string[] = p.product.category
@@ -43,6 +46,7 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       });
     }
 
+    // Filter by search query
     const q = query.trim().toLowerCase();
     if (q) {
       result = result.filter((p: any) =>
@@ -50,11 +54,16 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       );
     }
 
-    result.sort(
-      (a: any, b: any) =>
-        new Date(b.product.createdAt).getTime() -
-        new Date(a.product.createdAt).getTime()
-    );
+    // Sort by newest (with safety for missing createdAt)
+    result.sort((a: any, b: any) => {
+      const aTime = a.product?.createdAt
+        ? new Date(a.product.createdAt).getTime()
+        : 0;
+      const bTime = b.product?.createdAt
+        ? new Date(b.product.createdAt).getTime()
+        : 0;
+      return bTime - aTime;
+    });
 
     return result;
   }, [products, query, activeCategory]);
@@ -69,7 +78,7 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       {/* ── Search ── */}
       {/* ═══════════════════════════════════════════ */}
       <div className="mb-8 md:mb-10">
-        <div className="relative max-w-2xl mx-auto">
+        <div className="relative w-full max-w-2xl mx-auto">
           <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-gray-400 pointer-events-none" />
           <input
             type="text"
@@ -112,6 +121,7 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       {!hasQuery && productCategories.length > 0 && (
         <div className="mb-10 md:mb-14">
           <div className="flex gap-3 overflow-x-auto py-1.5 scrollbar-hide">
+            {/* "الكل" */}
             <button
               onClick={() => setActiveCategory(null)}
               className={`flex-shrink-0 px-7 py-3 rounded-xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
@@ -128,6 +138,7 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
               الكل
             </button>
 
+            {/* Categories */}
             {productCategories.map((cat) => {
               const isActive = activeCategory === cat;
               return (
@@ -175,7 +186,7 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       )}
 
       {/* ═══════════════════════════════════════════ */}
-      {/* ── Grid — عاد Grid الطبيعي ── */}
+      {/* ── Products — Flex center (يحل مشكلة الصف الناقص) ── */}
       {/* ═══════════════════════════════════════════ */}
       {filtered.length === 0 ? (
         <EmptyState
@@ -187,11 +198,11 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
           }}
         />
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5 mb-4 md:mb-8">
+        <div className="w-full flex flex-wrap justify-center gap-3 md:gap-4 lg:gap-5 mb-4 md:mb-8">
           {filtered.map((item: any, idx: number) => (
             <div
               key={item.id}
-              className="animate-fade-in"
+              className="w-[calc(50%-6px)] md:w-[calc(33.333%-11px)] lg:w-[calc(25%-15px)] animate-fade-in"
               style={{ animationDelay: `${Math.min(idx, 8) * 40}ms` }}
             >
               <ProductCard item={item} code={code} />
@@ -216,7 +227,7 @@ function EmptyState({
   onClear: () => void;
 }) {
   return (
-    <div className="text-center py-16 md:py-20 animate-fade-in">
+    <div className="w-full text-center py-16 md:py-20 animate-fade-in">
       <div className="w-20 h-20 rounded-2xl bg-gray-100 flex items-center justify-center mx-auto mb-5">
         <Package className="w-10 h-10 text-gray-300" strokeWidth={1.5} />
       </div>
