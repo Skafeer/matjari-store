@@ -26,9 +26,9 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
     sortBy: 'newest',
   });
 
-  // ── استخراج التصنيفات ──
+  // ── استخراج التصنيفات مع عدد المنتجات ──
   const productCategories = useMemo(() => {
-    const cats = new Set<string>();
+    const map = new Map<string, number>();
     products.forEach((p: any) => {
       const productCats: string[] = p.product.category
         ? p.product.category
@@ -36,9 +36,14 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
             .map((c: string) => c.trim())
             .filter((c: string) => c && c !== 'عام')
         : [];
-      productCats.forEach((c) => cats.add(c));
+      productCats.forEach((c) => {
+        map.set(c, (map.get(c) || 0) + 1);
+      });
     });
-    return Array.from(cats);
+    return Array.from(map.entries()).map(([name, count]) => ({
+      name,
+      count,
+    }));
   }, [products]);
 
   // ── الفلترة والترتيب ──
@@ -180,44 +185,93 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       {/* ── Categories ── */}
       {/* ═══════════════════════════════════════════ */}
       {!hasQuery && productCategories.length > 0 && (
-        <div className="mb-8 md:mb-10 -mx-4 md:mx-0">
-          <div className="flex gap-2 overflow-x-auto px-4 md:px-0 pb-1 scrollbar-hide">
-            <button
-              onClick={() => setActiveCategory(null)}
-              className={`flex-shrink-0 px-4 py-2 rounded-full text-[13px] font-semibold transition-all active:scale-95 border-[1.5px] ${
-                activeCategory === null
-                  ? 'text-white border-transparent shadow-sm'
-                  : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
-              }`}
-              style={
-                activeCategory === null
-                  ? { backgroundColor: 'var(--color-brand)' }
-                  : undefined
-              }
-            >
-              الكل
-            </button>
+        <div className="mb-8 md:mb-10">
+          <div className="relative -mx-4 md:mx-0">
 
-            {productCategories.map((cat) => (
+            {/* Right gradient (RTL start) */}
+            <div
+              className="absolute right-0 top-0 bottom-0 w-8 pointer-events-none z-10"
+              style={{
+                background:
+                  'linear-gradient(to left, var(--bg-page), transparent)',
+              }}
+              aria-hidden="true"
+            />
+
+            {/* Left gradient (RTL end) */}
+            <div
+              className="absolute left-0 top-0 bottom-0 w-8 pointer-events-none z-10"
+              style={{
+                background:
+                  'linear-gradient(to right, var(--bg-page), transparent)',
+              }}
+              aria-hidden="true"
+            />
+
+            {/* Pills */}
+            <div className="flex gap-2 overflow-x-auto px-4 md:px-0 pb-1 scrollbar-hide">
+
+              {/* "الكل" */}
               <button
-                key={cat}
-                onClick={() =>
-                  setActiveCategory(activeCategory === cat ? null : cat)
-                }
-                className={`flex-shrink-0 px-4 py-2 rounded-full text-[13px] font-semibold transition-all active:scale-95 border-[1.5px] ${
-                  activeCategory === cat
-                    ? 'text-white border-transparent shadow-sm'
-                    : 'bg-white text-gray-600 border-gray-200 hover:border-gray-300'
+                onClick={() => setActiveCategory(null)}
+                className={`flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold transition-all duration-200 active:scale-95 border ${
+                  activeCategory === null
+                    ? 'text-white border-transparent shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]'
+                    : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
                 }`}
                 style={
-                  activeCategory === cat
+                  activeCategory === null
                     ? { backgroundColor: 'var(--color-brand)' }
                     : undefined
                 }
               >
-                {cat}
+                <span>الكل</span>
+                <span
+                  className={`text-[10px] font-bold tabular-nums px-1.5 py-0.5 rounded-md ${
+                    activeCategory === null
+                      ? 'bg-white/25 text-white'
+                      : 'bg-gray-100 text-gray-500'
+                  }`}
+                >
+                  {products.length}
+                </span>
               </button>
-            ))}
+
+              {/* Categories */}
+              {productCategories.map((cat) => {
+                const isActive = activeCategory === cat.name;
+
+                return (
+                  <button
+                    key={cat.name}
+                    onClick={() =>
+                      setActiveCategory(isActive ? null : cat.name)
+                    }
+                    className={`flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold transition-all duration-200 active:scale-95 border ${
+                      isActive
+                        ? 'text-white border-transparent shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]'
+                        : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    }`}
+                    style={
+                      isActive
+                        ? { backgroundColor: 'var(--color-brand)' }
+                        : undefined
+                    }
+                  >
+                    <span className="whitespace-nowrap">{cat.name}</span>
+                    <span
+                      className={`text-[10px] font-bold tabular-nums px-1.5 py-0.5 rounded-md ${
+                        isActive
+                          ? 'bg-white/25 text-white'
+                          : 'bg-gray-100 text-gray-500'
+                      }`}
+                    >
+                      {cat.count}
+                    </span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
         </div>
       )}
