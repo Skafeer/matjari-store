@@ -182,99 +182,77 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       </div>
 
       {/* ═══════════════════════════════════════════ */}
-      {/* ── Categories ── */}
-      {/* ═══════════════════════════════════════════ */}
-      {!hasQuery && productCategories.length > 0 && (
-        <div className="mb-8 md:mb-10">
-          <div className="relative -mx-4 md:mx-0">
+{/* ── Categories ── */}
+{/* ═══════════════════════════════════════════ */}
+{!hasQuery && productCategories.length > 0 && (
+  <div className="mb-12 md:mb-16">
+    <div className="relative -mx-4 md:mx-0">
 
-            {/* Right gradient (RTL start) */}
-            <div
-              className="absolute right-0 top-0 bottom-0 w-8 pointer-events-none z-10"
-              style={{
-                background:
-                  'linear-gradient(to left, var(--bg-page), transparent)',
-              }}
-              aria-hidden="true"
-            />
+      {/* Right gradient (RTL start) */}
+      <div
+        className="absolute right-0 top-0 bottom-0 w-10 pointer-events-none z-10"
+        style={{
+          background: 'linear-gradient(to left, var(--bg-page), transparent)',
+        }}
+        aria-hidden="true"
+      />
 
-            {/* Left gradient (RTL end) */}
-            <div
-              className="absolute left-0 top-0 bottom-0 w-8 pointer-events-none z-10"
-              style={{
-                background:
-                  'linear-gradient(to right, var(--bg-page), transparent)',
-              }}
-              aria-hidden="true"
-            />
+      {/* Left gradient (RTL end) */}
+      <div
+        className="absolute left-0 top-0 bottom-0 w-10 pointer-events-none z-10"
+        style={{
+          background: 'linear-gradient(to right, var(--bg-page), transparent)',
+        }}
+        aria-hidden="true"
+      />
 
-            {/* Pills */}
-            <div className="flex gap-2 overflow-x-auto px-4 md:px-0 pb-1 scrollbar-hide">
+      {/* Pills */}
+      <div className="flex gap-3 overflow-x-auto px-6 md:px-1 py-2 scrollbar-hide">
 
-              {/* "الكل" */}
-              <button
-                onClick={() => setActiveCategory(null)}
-                className={`flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold transition-all duration-200 active:scale-95 border ${
-                  activeCategory === null
-                    ? 'text-white border-transparent shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]'
-                    : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                }`}
-                style={
-                  activeCategory === null
-                    ? { backgroundColor: 'var(--color-brand)' }
-                    : undefined
-                }
-              >
-                <span>الكل</span>
-                <span
-                  className={`text-[10px] font-bold tabular-nums px-1.5 py-0.5 rounded-md ${
-                    activeCategory === null
-                      ? 'bg-white/25 text-white'
-                      : 'bg-gray-100 text-gray-500'
-                  }`}
-                >
-                  {products.length}
-                </span>
-              </button>
+        {/* "الكل" */}
+        <button
+          onClick={() => setActiveCategory(null)}
+          className={`flex-shrink-0 px-6 py-2.5 rounded-2xl text-[13px] font-bold transition-all duration-200 active:scale-95 border ${
+            activeCategory === null
+              ? 'text-white border-transparent shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]'
+              : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+          }`}
+          style={
+            activeCategory === null
+              ? { backgroundColor: 'var(--color-brand)' }
+              : undefined
+          }
+        >
+          الكل
+        </button>
 
-              {/* Categories */}
-              {productCategories.map((cat) => {
-                const isActive = activeCategory === cat.name;
+        {/* Categories */}
+        {productCategories.map((cat) => {
+          const isActive = activeCategory === cat.name;
 
-                return (
-                  <button
-                    key={cat.name}
-                    onClick={() =>
-                      setActiveCategory(isActive ? null : cat.name)
-                    }
-                    className={`flex-shrink-0 flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] font-bold transition-all duration-200 active:scale-95 border ${
-                      isActive
-                        ? 'text-white border-transparent shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]'
-                        : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                    }`}
-                    style={
-                      isActive
-                        ? { backgroundColor: 'var(--color-brand)' }
-                        : undefined
-                    }
-                  >
-                    <span className="whitespace-nowrap">{cat.name}</span>
-                    <span
-                      className={`text-[10px] font-bold tabular-nums px-1.5 py-0.5 rounded-md ${
-                        isActive
-                          ? 'bg-white/25 text-white'
-                          : 'bg-gray-100 text-gray-500'
-                      }`}
-                    >
-                      {cat.count}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
+          return (
+            <button
+              key={cat.name}
+              onClick={() => setActiveCategory(isActive ? null : cat.name)}
+              className={`flex-shrink-0 px-6 py-2.5 rounded-2xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
+                isActive
+                  ? 'text-white border-transparent shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]'
+                  : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+              }`}
+              style={
+                isActive
+                  ? { backgroundColor: 'var(--color-brand)' }
+                  : undefined
+              }
+            >
+              {cat.name}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+)}
 
       {/* ═══════════════════════════════════════════ */}
       {/* ── Section Title ── */}
