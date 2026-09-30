@@ -57,13 +57,13 @@ export default function ProductCard({ item, code }: ProductCardProps) {
         href={`/${code}/product/${item.productId}`}
         className="flex flex-col flex-1"
       >
-        {/* ─── Image — أطول ─── */}
-        <div className="aspect-[4/5] bg-white relative overflow-hidden">
+        {/* ─── Image — مربع مع object-contain ─── */}
+        <div className="aspect-square bg-white relative overflow-hidden">
           {img ? (
             <img
               src={img}
               alt={product.name}
-              className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-[1.03]"
+              className="w-full h-full object-contain p-3 transition-transform duration-500 ease-out group-hover:scale-[1.03]"
               loading="lazy"
             />
           ) : (
@@ -107,7 +107,7 @@ export default function ProductCard({ item, code }: ProductCardProps) {
           )}
         </div>
 
-        {/* ─── Info — مرتب ومتناسق ─── */}
+        {/* ─── Info ─── */}
         <div className="px-3 pt-3 pb-2 flex-1 flex flex-col">
 
           {/* Category — سطر ثابت */}

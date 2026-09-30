@@ -17,9 +17,10 @@ export default async function StoreHomePage({
 
   const { products } = data;
 
+  // ─── Empty Store ───
   if (!products || products.length === 0) {
     return (
-      <div className="w-full max-w-lg mx-auto px-5 sm:px-6 py-20 text-center animate-fade-in">
+      <div className="w-full max-w-lg mx-auto px-6 md:px-8 py-20 text-center animate-fade-in">
         <div
           className="w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-6"
           style={{ backgroundColor: 'var(--color-brand-light)' }}
@@ -41,7 +42,7 @@ export default async function StoreHomePage({
   }
 
   return (
-    <div className="w-full max-w-6xl mx-auto px-5 sm:px-6 md:px-8 pt-8 md:pt-12 pb-12 md:pb-20">
+    <div className="w-full max-w-6xl mx-auto px-6 md:px-8 pt-8 md:pt-12 pb-12 md:pb-20">
       <StoreProducts products={products} code={code} />
     </div>
   );

@@ -54,7 +54,7 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       );
     }
 
-    // Sort by newest (with safety for missing createdAt)
+    // Sort by newest (safety for missing createdAt)
     result.sort((a: any, b: any) => {
       const aTime = a.product?.createdAt
         ? new Date(a.product.createdAt).getTime()
@@ -186,7 +186,7 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       )}
 
       {/* ═══════════════════════════════════════════ */}
-      {/* ── Products — Flex center (يحل مشكلة الصف الناقص) ── */}
+      {/* ── Products Grid ── */}
       {/* ═══════════════════════════════════════════ */}
       {filtered.length === 0 ? (
         <EmptyState
@@ -198,11 +198,11 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
           }}
         />
       ) : (
-        <div className="w-full flex flex-wrap justify-center gap-3 md:gap-4 lg:gap-5 mb-4 md:mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5 lg:gap-6 mb-4 md:mb-8">
           {filtered.map((item: any, idx: number) => (
             <div
               key={item.id}
-              className="w-[calc(50%-6px)] md:w-[calc(33.333%-11px)] lg:w-[calc(25%-15px)] animate-fade-in"
+              className="animate-fade-in"
               style={{ animationDelay: `${Math.min(idx, 8) * 40}ms` }}
             >
               <ProductCard item={item} code={code} />
