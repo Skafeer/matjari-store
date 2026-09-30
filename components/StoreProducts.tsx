@@ -1,15 +1,9 @@
 // components/StoreProducts.tsx
 'use client';
 
-import { useState, useMemo, useEffect } from 'react';
-import { Search, X, Package, SlidersHorizontal } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { Search, X, Package } from 'lucide-react';
 import ProductCard from './ProductCard';
-
-interface Filters {
-  minPrice: string;
-  maxPrice: string;
-  sortBy: string;
-}
 
 interface StoreProductsProps {
   products: any[];
@@ -19,13 +13,8 @@ interface StoreProductsProps {
 export default function StoreProducts({ products, code }: StoreProductsProps) {
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const [filterModal, setFilterModal] = useState(false);
-  const [filters, setFilters] = useState<Filters>({
-    minPrice: '',
-    maxPrice: '',
-    sortBy: 'newest',
-  });
 
+  // ── استخراج التصنيفات ──
   const productCategories = useMemo(() => {
     const cats = new Set<string>();
     products.forEach((p: any) => {
@@ -40,9 +29,11 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
     return Array.from(cats);
   }, [products]);
 
+  // ── الفلترة ──
   const filtered = useMemo(() => {
     let result = [...products];
 
+    // Category
     if (activeCategory) {
       result = result.filter((p: any) => {
         const productCats: string[] = p.product.category
@@ -55,6 +46,7 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       });
     }
 
+    // Search
     const q = query.trim().toLowerCase();
     if (q) {
       result = result.filter((p: any) =>
@@ -62,100 +54,45 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       );
     }
 
-    if (filters.minPrice) {
-      result = result.filter((p: any) => p.price >= Number(filters.minPrice));
-    }
-    if (filters.maxPrice) {
-      result = result.filter((p: any) => p.price <= Number(filters.maxPrice));
-    }
-
-    switch (filters.sortBy) {
-      case 'price_asc':
-        result.sort((a: any, b: any) => a.price - b.price);
-        break;
-      case 'price_desc':
-        result.sort((a: any, b: any) => b.price - a.price);
-        break;
-      case 'stock_desc':
-        result.sort(
-          (a: any, b: any) => (b.product.stock || 0) - (a.product.stock || 0)
-        );
-        break;
-      case 'stock_asc':
-        result.sort(
-          (a: any, b: any) => (a.product.stock || 0) - (b.product.stock || 0)
-        );
-        break;
-      default:
-        result.sort(
-          (a: any, b: any) =>
-            new Date(b.product.createdAt).getTime() -
-            new Date(a.product.createdAt).getTime()
-        );
-    }
+    // Sort by newest
+    result.sort(
+      (a: any, b: any) =>
+        new Date(b.product.createdAt).getTime() -
+        new Date(a.product.createdAt).getTime()
+    );
 
     return result;
-  }, [products, query, activeCategory, filters]);
+  }, [products, query, activeCategory]);
 
   const hasQuery = query.trim().length > 0;
-  const hasActiveFilters =
-    filters.minPrice !== '' ||
-    filters.maxPrice !== '' ||
-    filters.sortBy !== 'newest';
   const showSectionTitle =
     !hasQuery && !activeCategory && filtered.length > 0;
 
   return (
     <div className="w-full">
       {/* ═══════════════════════════════════════════ */}
-      {/* ── Search + Filter ── */}
+      {/* ── Search ── */}
       {/* ═══════════════════════════════════════════ */}
       <div className="mb-8 md:mb-10">
-        <div className="flex items-center gap-2.5 md:gap-3 max-w-2xl mx-auto">
-          <div className="relative flex-1 min-w-0">
-            <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-gray-400 pointer-events-none" />
-            <input
-              type="text"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="ابحث عن منتج..."
-              className="w-full h-11 md:h-12 pr-11 pl-11 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-gray-300 focus:ring-4 focus:ring-gray-100 transition-all"
-              dir="rtl"
-            />
-            {hasQuery && (
-              <button
-                onClick={() => setQuery('')}
-                className="absolute left-3 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all active:scale-90"
-                aria-label="مسح البحث"
-              >
-                <X className="w-3.5 h-3.5 text-gray-600" />
-              </button>
-            )}
-          </div>
-
-          <button
-            onClick={() => setFilterModal(true)}
-            className={`relative flex-shrink-0 w-11 h-11 md:w-12 md:h-12 rounded-xl border flex items-center justify-center transition-all hover:opacity-95 active:scale-95 shadow-sm ${
-              hasActiveFilters
-                ? 'border-transparent'
-                : 'border-gray-200 bg-white'
-            }`}
-            style={
-              hasActiveFilters
-                ? { backgroundColor: 'var(--color-brand)' }
-                : undefined
-            }
-            aria-label="فلترة"
-          >
-            <SlidersHorizontal
-              className={`w-[18px] h-[18px] ${
-                hasActiveFilters ? 'text-white' : 'text-gray-700'
-              }`}
-            />
-            {hasActiveFilters && (
-              <span className="absolute -top-1 -right-1 w-3 h-3 rounded-full bg-red-500 border-2 border-white" />
-            )}
-          </button>
+        <div className="relative max-w-2xl mx-auto">
+          <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-gray-400 pointer-events-none" />
+          <input
+            type="text"
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="ابحث عن منتج..."
+            className="w-full h-11 md:h-12 pr-11 pl-11 rounded-xl border border-gray-200 bg-white text-sm text-gray-900 placeholder:text-gray-400 focus:outline-none focus:border-gray-300 focus:ring-4 focus:ring-gray-100 transition-all"
+            dir="rtl"
+          />
+          {hasQuery && (
+            <button
+              onClick={() => setQuery('')}
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-all active:scale-90"
+              aria-label="مسح البحث"
+            >
+              <X className="w-3.5 h-3.5 text-gray-600" />
+            </button>
+          )}
         </div>
 
         {hasQuery && (
@@ -175,7 +112,7 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       </div>
 
       {/* ═══════════════════════════════════════════ */}
-      {/* ── Categories — بدون أي padding أو negative margin ── */}
+      {/* ── Categories ── */}
       {/* ═══════════════════════════════════════════ */}
       {!hasQuery && productCategories.length > 0 && (
         <div className="mb-12 md:mb-16 w-full">
@@ -267,167 +204,6 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
           ))}
         </div>
       )}
-
-      <FilterModal
-        open={filterModal}
-        onClose={() => setFilterModal(false)}
-        filters={filters}
-        setFilters={setFilters}
-        onReset={() =>
-          setFilters({ minPrice: '', maxPrice: '', sortBy: 'newest' })
-        }
-      />
-    </div>
-  );
-}
-
-// ═══════════════════════════════════════════
-// ── Filter Modal ──
-// ═══════════════════════════════════════════
-function FilterModal({
-  open,
-  onClose,
-  filters,
-  setFilters,
-  onReset,
-}: {
-  open: boolean;
-  onClose: () => void;
-  filters: Filters;
-  setFilters: (f: Filters) => void;
-  onReset: () => void;
-}) {
-  useEffect(() => {
-    if (!open) return;
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
-    };
-    document.addEventListener('keydown', onKey);
-    document.body.style.overflow = 'hidden';
-    return () => {
-      document.removeEventListener('keydown', onKey);
-      document.body.style.overflow = '';
-    };
-  }, [open, onClose]);
-
-  if (!open) return null;
-
-  const sortOptions = [
-    { id: 'newest', label: 'الأحدث' },
-    { id: 'price_asc', label: 'السعر: من الأقل للأعلى' },
-    { id: 'price_desc', label: 'السعر: من الأعلى للأقل' },
-    { id: 'stock_desc', label: 'الأكثر توفراً' },
-    { id: 'stock_asc', label: 'الأقل توفراً' },
-  ];
-
-  return (
-    <div
-      className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end md:items-center justify-center md:p-4 animate-fade-in-fast"
-      onClick={onClose}
-      dir="rtl"
-    >
-      <div
-        className="bg-white w-full max-w-md rounded-t-3xl md:rounded-3xl p-6 max-h-[88vh] overflow-y-auto animate-slide-up"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
-          <h2 className="text-lg font-bold text-gray-900">فلترة المنتجات</h2>
-          <button
-            onClick={onClose}
-            className="w-9 h-9 rounded-xl hover:bg-gray-100 flex items-center justify-center transition-all active:scale-90"
-            aria-label="إغلاق"
-          >
-            <X className="w-5 h-5 text-gray-600" />
-          </button>
-        </div>
-
-        <div className="mb-6">
-          <label className="text-sm font-bold text-gray-900 mb-3 block">
-            نطاق السعر (د.ع)
-          </label>
-          <div className="flex items-center gap-3">
-            <input
-              type="number"
-              inputMode="numeric"
-              placeholder="من"
-              value={filters.minPrice}
-              onChange={(e) =>
-                setFilters({ ...filters, minPrice: e.target.value })
-              }
-              className="flex-1 h-11 px-3 rounded-xl border-2 border-gray-200 bg-gray-50 text-sm text-center text-gray-900 focus:outline-none focus:border-[var(--color-brand)] focus:bg-white transition-all"
-              dir="ltr"
-            />
-            <span className="text-gray-400 font-bold">-</span>
-            <input
-              type="number"
-              inputMode="numeric"
-              placeholder="إلى"
-              value={filters.maxPrice}
-              onChange={(e) =>
-                setFilters({ ...filters, maxPrice: e.target.value })
-              }
-              className="flex-1 h-11 px-3 rounded-xl border-2 border-gray-200 bg-gray-50 text-sm text-center text-gray-900 focus:outline-none focus:border-[var(--color-brand)] focus:bg-white transition-all"
-              dir="ltr"
-            />
-          </div>
-        </div>
-
-        <div className="mb-2">
-          <label className="text-sm font-bold text-gray-900 mb-3 block">
-            ترتيب حسب
-          </label>
-          <div className="space-y-0.5">
-            {sortOptions.map((opt) => {
-              const selected = filters.sortBy === opt.id;
-              return (
-                <button
-                  key={opt.id}
-                  onClick={() => setFilters({ ...filters, sortBy: opt.id })}
-                  className="w-full flex items-center gap-3 py-3 px-2 border-b border-gray-100 last:border-0 hover:bg-gray-50 transition-colors rounded-lg"
-                >
-                  <span
-                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all flex-shrink-0 ${
-                      selected ? 'border-transparent' : 'border-gray-300'
-                    }`}
-                    style={
-                      selected
-                        ? { backgroundColor: 'var(--color-brand)' }
-                        : undefined
-                    }
-                  >
-                    {selected && (
-                      <span className="w-2 h-2 rounded-full bg-white" />
-                    )}
-                  </span>
-                  <span
-                    className={`text-sm text-right flex-1 ${
-                      selected ? 'font-bold text-gray-900' : 'text-gray-700'
-                    }`}
-                  >
-                    {opt.label}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
-        <div className="flex gap-3 pt-5 mt-4 border-t border-gray-100">
-          <button
-            onClick={onReset}
-            className="flex-1 h-12 rounded-xl border-2 border-gray-200 text-gray-600 font-bold text-sm hover:bg-gray-50 active:scale-95 transition-all"
-          >
-            إعادة تعيين
-          </button>
-          <button
-            onClick={onClose}
-            className="flex-1 h-12 rounded-xl text-white font-bold text-sm active:scale-95 transition-all shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]"
-            style={{ backgroundColor: 'var(--color-brand)' }}
-          >
-            تطبيق الفلتر
-          </button>
-        </div>
-      </div>
     </div>
   );
 }
@@ -462,7 +238,7 @@ function EmptyState({
             <span className="font-semibold text-gray-700">{category}</span>"
           </>
         ) : (
-          'لا توجد منتجات مطابقة للفلتر'
+          'لا توجد منتجات'
         )}
       </p>
       <button
