@@ -128,7 +128,7 @@ export default function CartPage() {
   // ═══════════════════════════════════════════
   if (success) {
     return (
-      <div className="mx-auto w-full max-w-lg px-6 md:px-8 py-16 md:py-20 text-center">
+      <div className="mx-auto w-full max-w-lg px-5 sm:px-6 py-16 md:py-20 text-center">
         <div
           className="w-20 h-20 rounded-3xl flex items-center justify-center mx-auto mb-6 animate-scale-in"
           style={{ backgroundColor: 'var(--color-brand-light)' }}
@@ -167,7 +167,7 @@ export default function CartPage() {
   // ═══════════════════════════════════════════
   if (cart === null) {
     return (
-      <div className="mx-auto w-full max-w-lg px-6 py-20 text-center">
+      <div className="mx-auto w-full max-w-lg px-5 py-20 text-center">
         <Loader2 className="w-8 h-8 animate-spin mx-auto text-gray-400" />
       </div>
     );
@@ -178,7 +178,7 @@ export default function CartPage() {
   // ═══════════════════════════════════════════
   if (cart.length === 0) {
     return (
-      <div className="mx-auto w-full max-w-lg px-6 md:px-8 py-16 md:py-20 text-center animate-fade-in">
+      <div className="mx-auto w-full max-w-lg px-5 sm:px-6 py-16 md:py-20 text-center animate-fade-in">
         <div className="w-24 h-24 rounded-3xl bg-gray-100 flex items-center justify-center mx-auto mb-6">
           <ShoppingBag className="w-12 h-12 text-gray-400" strokeWidth={1.5} />
         </div>
@@ -204,7 +204,7 @@ export default function CartPage() {
   // ── Cart ──
   // ═══════════════════════════════════════════
   return (
-    <div className="mx-auto w-full max-w-6xl px-5 sm:px-6 md:px-8 pt-8 md:pt-10 pb-20 md:pb-24">
+    <div className="mx-auto w-full max-w-6xl px-5 sm:px-6 md:px-8 pt-8 md:pt-10 pb-20 md:pb-24 overflow-x-hidden">
 
       {/* ── Back ── */}
       <Link
@@ -231,20 +231,21 @@ export default function CartPage() {
           <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-red-800">حدث خطأ</p>
-            <p className="text-xs text-red-700 mt-1">{error}</p>
+            <p className="text-xs text-red-700 mt-1 break-words">{error}</p>
           </div>
         </div>
       )}
 
-      <div className="grid md:grid-cols-3 gap-8 md:gap-10 items-start">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-10 items-start">
 
         {/* ═══════════════════════════════════════════ */}
         {/* ── Left Column ── */}
         {/* ═══════════════════════════════════════════ */}
-        <div className="md:col-span-2 space-y-8 md:space-y-10">
+        <div className="md:col-span-2 space-y-8 md:space-y-10 min-w-0 w-full">
 
           {/* ═══ Cart Items ═══ */}
           <div className="bg-white rounded-2xl border border-gray-100 overflow-hidden">
+
             {/* Header */}
             <div className="px-5 md:px-6 py-4 border-b border-gray-100">
               <h2 className="text-sm font-bold text-gray-900">المنتجات</h2>
@@ -255,7 +256,7 @@ export default function CartPage() {
               {cart.map((item) => (
                 <div
                   key={item.productId}
-                  className="flex gap-4 md:gap-5 p-5 md:p-6"
+                  className="flex gap-4 md:gap-5 p-5 md:p-6 w-full"
                 >
                   {/* Image */}
                   <Link
@@ -275,11 +276,11 @@ export default function CartPage() {
                     )}
                   </Link>
 
-                  {/* Content */}
-                  <div className="flex-1 min-w-0 flex flex-col">
+                  {/* Content — ✅ min-w-0 + overflow-hidden */}
+                  <div className="flex-1 min-w-0 overflow-hidden flex flex-col">
                     <Link
                       href={`/${code}/product/${item.productId}`}
-                      className="text-[13px] md:text-sm font-semibold text-gray-900 line-clamp-2 leading-snug mb-2 hover:opacity-80 transition"
+                      className="text-[13px] md:text-sm font-semibold text-gray-900 line-clamp-2 leading-snug mb-2 hover:opacity-80 transition break-words"
                     >
                       {item.name}
                     </Link>
@@ -294,7 +295,7 @@ export default function CartPage() {
                     {/* Actions Row */}
                     <div className="flex items-center justify-between gap-3 mt-auto">
                       {/* Qty */}
-                      <div className="inline-flex items-center gap-1 border border-gray-200 rounded-lg p-1">
+                      <div className="inline-flex items-center gap-1 border border-gray-200 rounded-lg p-1 flex-shrink-0">
                         <button
                           onClick={() => handleQty(item.productId, item.quantity - 1)}
                           className="w-8 h-8 rounded-md hover:bg-gray-100 flex items-center justify-center transition active:scale-90"
@@ -320,7 +321,7 @@ export default function CartPage() {
                       {/* Remove */}
                       <button
                         onClick={() => handleRemove(item.productId)}
-                        className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-400 hover:text-red-600 transition px-2 py-1"
+                        className="inline-flex items-center gap-1.5 text-xs font-medium text-gray-400 hover:text-red-600 transition px-2 py-1 flex-shrink-0"
                         aria-label="حذف المنتج"
                       >
                         <Trash2 className="w-4 h-4" />
@@ -464,28 +465,28 @@ export default function CartPage() {
         {/* ═══════════════════════════════════════════ */}
         {/* ── Right Column — Summary ── */}
         {/* ═══════════════════════════════════════════ */}
-        <div className="md:col-span-1 md:sticky md:top-24">
+        <div className="md:col-span-1 md:sticky md:top-24 min-w-0 w-full">
           <div className="bg-white rounded-2xl border border-gray-100 p-6 md:p-7">
             <h2 className="text-sm font-bold text-gray-900 mb-6">
               ملخص الطلب
             </h2>
 
             <div className="space-y-4 text-sm">
-              <div className="flex justify-between items-center">
-                <span className="text-gray-500">المنتجات</span>
-                <span className="font-semibold text-gray-900 tabular-nums">
+              <div className="flex justify-between items-center gap-3">
+                <span className="text-gray-500 flex-shrink-0">المنتجات</span>
+                <span className="font-semibold text-gray-900 tabular-nums text-right">
                   {fmt(subtotal)} د.ع
                 </span>
               </div>
 
-              <div className="flex justify-between items-center">
-                <span className="text-gray-500">التوصيل</span>
-                <span className="font-semibold text-gray-900 tabular-nums">
+              <div className="flex justify-between items-center gap-3">
+                <span className="text-gray-500 flex-shrink-0">التوصيل</span>
+                <span className="font-semibold text-gray-900 tabular-nums text-right">
                   {shipping > 0 ? `${fmt(shipping)} د.ع` : '—'}
                 </span>
               </div>
 
-              <div className="pt-5 mt-5 border-t border-gray-100 flex justify-between items-baseline">
+              <div className="pt-5 mt-5 border-t border-gray-100 flex justify-between items-baseline gap-3">
                 <span className="font-bold text-gray-900">الإجمالي</span>
                 <span
                   className="text-2xl font-bold tabular-nums tracking-tight"
@@ -572,10 +573,12 @@ function SuccessRow({
   mono?: boolean;
 }) {
   return (
-    <div className="flex justify-between items-center py-2.5 border-b border-gray-100 last:border-0">
-      <span className="text-xs text-gray-500">{label}</span>
+    <div className="flex justify-between items-center gap-3 py-2.5 border-b border-gray-100 last:border-0">
+      <span className="text-xs text-gray-500 flex-shrink-0">{label}</span>
       <span
-        className={`text-sm font-bold ${highlight ? 'text-lg' : ''} ${mono ? 'font-mono' : ''} tabular-nums`}
+        className={`text-sm font-bold ${highlight ? 'text-lg' : ''} ${
+          mono ? 'font-mono' : ''
+        } tabular-nums text-right`}
         style={highlight ? { color: 'var(--color-brand)' } : { color: '#111827' }}
         dir={mono ? 'ltr' : undefined}
       >
