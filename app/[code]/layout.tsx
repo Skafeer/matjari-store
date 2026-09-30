@@ -32,7 +32,7 @@ export default async function StoreLayout({
           '--color-brand-light': color.light,
         } as CSSProperties
       }
-      className="min-h-screen flex flex-col bg-gray-50"
+      className="flex flex-col bg-gray-50 min-h-screen"
     >
       <StoreHeader store={data.store} code={code} />
       <main className="flex-1">{children}</main>

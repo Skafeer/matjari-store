@@ -45,7 +45,6 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
   const filtered = useMemo(() => {
     let result = [...products];
 
-    // Category
     if (activeCategory) {
       result = result.filter((p: any) => {
         const productCats: string[] = p.product.category
@@ -58,7 +57,6 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       });
     }
 
-    // Search
     const q = query.trim().toLowerCase();
     if (q) {
       result = result.filter((p: any) =>
@@ -66,7 +64,6 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       );
     }
 
-    // Price
     if (filters.minPrice) {
       result = result.filter((p: any) => p.price >= Number(filters.minPrice));
     }
@@ -74,7 +71,6 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       result = result.filter((p: any) => p.price <= Number(filters.maxPrice));
     }
 
-    // Sort
     switch (filters.sortBy) {
       case 'price_asc':
         result.sort((a: any, b: any) => a.price - b.price);
@@ -142,7 +138,9 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
           <button
             onClick={() => setFilterModal(true)}
             className={`relative flex-shrink-0 w-11 h-11 md:w-12 md:h-12 rounded-xl border flex items-center justify-center transition-all hover:opacity-95 active:scale-95 shadow-sm ${
-              hasActiveFilters ? 'border-transparent' : 'border-gray-200 bg-white'
+              hasActiveFilters
+                ? 'border-transparent'
+                : 'border-gray-200 bg-white'
             }`}
             style={
               hasActiveFilters
@@ -177,78 +175,53 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       </div>
 
       {/* ═══════════════════════════════════════════ */}
-{/* ── Categories ── */}
-{/* ═══════════════════════════════════════════ */}
-{!hasQuery && productCategories.length > 0 && (
-  <div className="mb-12 md:mb-16">
-    {/* ── Gradient mask wrapper ── */}
-    <div className="relative">
-      {/* Right gradient */}
-      <div
-        className="absolute right-0 top-0 bottom-0 w-10 pointer-events-none z-10"
-        style={{
-          background: 'linear-gradient(to left, var(--bg-page), transparent)',
-        }}
-        aria-hidden="true"
-      />
-
-      {/* Left gradient */}
-      <div
-        className="absolute left-0 top-0 bottom-0 w-10 pointer-events-none z-10"
-        style={{
-          background: 'linear-gradient(to right, var(--bg-page), transparent)',
-        }}
-        aria-hidden="true"
-      />
-
-      {/* Pills — scrollable container */}
-      <div
-        className="flex gap-2.5 overflow-x-auto py-2 scrollbar-hide -mx-5 px-5 md:mx-0 md:px-0"
-      >
-        {/* "الكل" */}
-        <button
-          onClick={() => setActiveCategory(null)}
-          className={`flex-shrink-0 px-5 py-3 rounded-2xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
-            activeCategory === null
-              ? 'text-white border-transparent shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]'
-              : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-          }`}
-          style={
-            activeCategory === null
-              ? { backgroundColor: 'var(--color-brand)' }
-              : undefined
-          }
-        >
-          الكل
-        </button>
-
-        {/* Categories */}
-        {productCategories.map((cat) => {
-          const isActive = activeCategory === cat;
-
-          return (
+      {/* ── Categories ── */}
+      {/* ═══════════════════════════════════════════ */}
+      {!hasQuery && productCategories.length > 0 && (
+        <div className="mb-12 md:mb-16">
+          <div className="flex gap-2.5 overflow-x-auto py-1 scrollbar-hide">
+            {/* "الكل" */}
             <button
-              key={cat}
-              onClick={() => setActiveCategory(isActive ? null : cat)}
-              className={`flex-shrink-0 px-5 py-3 rounded-2xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
-                isActive
-                  ? 'text-white border-transparent shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]'
+              onClick={() => setActiveCategory(null)}
+              className={`flex-shrink-0 px-5 py-2.5 rounded-xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
+                activeCategory === null
+                  ? 'text-white border-transparent shadow-[0_3px_10px_-3px_rgba(12,102,121,0.4)]'
                   : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
               }`}
               style={
-                isActive
+                activeCategory === null
                   ? { backgroundColor: 'var(--color-brand)' }
                   : undefined
               }
             >
-              {cat}
+              الكل
             </button>
-          );
-        })}
-      </div>
-    </div>
-  </div>
-)}
+
+            {/* Categories */}
+            {productCategories.map((cat) => {
+              const isActive = activeCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => setActiveCategory(isActive ? null : cat)}
+                  className={`flex-shrink-0 px-5 py-2.5 rounded-xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
+                    isActive
+                      ? 'text-white border-transparent shadow-[0_3px_10px_-3px_rgba(12,102,121,0.4)]'
+                      : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                  }`}
+                  style={
+                    isActive
+                      ? { backgroundColor: 'var(--color-brand)' }
+                      : undefined
+                  }
+                >
+                  {cat}
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
 
       {/* ═══════════════════════════════════════════ */}
       {/* ── Section Title ── */}
@@ -360,7 +333,6 @@ function FilterModal({
         className="bg-white w-full max-w-md rounded-t-3xl md:rounded-3xl p-6 max-h-[88vh] overflow-y-auto animate-slide-up"
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
         <div className="flex items-center justify-between mb-6 pb-4 border-b border-gray-100">
           <h2 className="text-lg font-bold text-gray-900">فلترة المنتجات</h2>
           <button
@@ -372,7 +344,6 @@ function FilterModal({
           </button>
         </div>
 
-        {/* Price Range */}
         <div className="mb-6">
           <label className="text-sm font-bold text-gray-900 mb-3 block">
             نطاق السعر (د.ع)
@@ -404,7 +375,6 @@ function FilterModal({
           </div>
         </div>
 
-        {/* Sort Options */}
         <div className="mb-2">
           <label className="text-sm font-bold text-gray-900 mb-3 block">
             ترتيب حسب
@@ -445,7 +415,6 @@ function FilterModal({
           </div>
         </div>
 
-        {/* Footer */}
         <div className="flex gap-3 pt-5 mt-4 border-t border-gray-100">
           <button
             onClick={onReset}
