@@ -112,51 +112,53 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       </div>
 
       {/* ═══════════════════════════════════════════ */}
-      {/* ── Categories ── */}
-      {/* ═══════════════════════════════════════════ */}
-      {!hasQuery && productCategories.length > 0 && (
-        <div className="mb-12 md:mb-16 w-full">
-          <div className="flex gap-2.5 overflow-x-auto py-1 scrollbar-hide">
-            <button
-              onClick={() => setActiveCategory(null)}
-              className={`flex-shrink-0 px-5 py-2.5 rounded-xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
-                activeCategory === null
-                  ? 'text-white border-transparent shadow-[0_3px_10px_-3px_rgba(12,102,121,0.4)]'
-                  : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-              }`}
-              style={
-                activeCategory === null
-                  ? { backgroundColor: 'var(--color-brand)' }
-                  : undefined
-              }
-            >
-              الكل
-            </button>
+{/* ── Categories ── */}
+{/* ═══════════════════════════════════════════ */}
+{!hasQuery && productCategories.length > 0 && (
+  <div className="mb-12 md:mb-16 w-full">
+    <div className="flex gap-3 overflow-x-auto py-1.5 scrollbar-hide">
+      {/* "الكل" */}
+      <button
+        onClick={() => setActiveCategory(null)}
+        className={`flex-shrink-0 px-7 py-3 rounded-xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
+          activeCategory === null
+            ? 'text-white border-transparent shadow-[0_3px_10px_-3px_rgba(12,102,121,0.4)]'
+            : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+        }`}
+        style={
+          activeCategory === null
+            ? { backgroundColor: 'var(--color-brand)' }
+            : undefined
+        }
+      >
+        الكل
+      </button>
 
-            {productCategories.map((cat) => {
-              const isActive = activeCategory === cat;
-              return (
-                <button
-                  key={cat}
-                  onClick={() => setActiveCategory(isActive ? null : cat)}
-                  className={`flex-shrink-0 px-5 py-2.5 rounded-xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
-                    isActive
-                      ? 'text-white border-transparent shadow-[0_3px_10px_-3px_rgba(12,102,121,0.4)]'
-                      : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                  }`}
-                  style={
-                    isActive
-                      ? { backgroundColor: 'var(--color-brand)' }
-                      : undefined
-                  }
-                >
-                  {cat}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      )}
+      {/* Categories */}
+      {productCategories.map((cat) => {
+        const isActive = activeCategory === cat;
+        return (
+          <button
+            key={cat}
+            onClick={() => setActiveCategory(isActive ? null : cat)}
+            className={`flex-shrink-0 px-7 py-3 rounded-xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
+              isActive
+                ? 'text-white border-transparent shadow-[0_3px_10px_-3px_rgba(12,102,121,0.4)]'
+                : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+            }`}
+            style={
+              isActive
+                ? { backgroundColor: 'var(--color-brand)' }
+                : undefined
+            }
+          >
+            {cat}
+          </button>
+        );
+      })}
+    </div>
+  </div>
+)}
 
       {/* ═══════════════════════════════════════════ */}
       {/* ── Section Title ── */}
