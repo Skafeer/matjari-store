@@ -1,8 +1,16 @@
 import type { Metadata, Viewport } from 'next';
+import { IBM_Plex_Sans_Arabic } from 'next/font/google';
 import './globals.css';
 
+const ibmPlexArabic = IBM_Plex_Sans_Arabic({
+  weight: ['300', '400', '500', '600', '700'],
+  subsets: ['arabic', 'latin'],
+  variable: '--font-ibm-plex-arabic',
+  display: 'swap',
+});
+
 export const metadata: Metadata = {
-  title: 'متجري — منصة المتاجر الإلكترونية',
+  title: 'بازاري — منصة المتاجر الإلكترونية',
   description: 'أنشئ متجرك الإلكتروني وابدأ البيع في ثوانٍ',
 };
 
@@ -19,8 +27,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ar" dir="rtl">
-      <body>{children}</body>
+    <html lang="ar" dir="rtl" className={ibmPlexArabic.variable}>
+      <body className="font-sans">{children}</body>
     </html>
   );
 }

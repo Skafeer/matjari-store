@@ -1,8 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @theme {
-  --font-family-cairo: 'Cairo', system-ui, sans-serif;
+  /* ✅ IBM Plex Sans Arabic — الخط الأساسي */
+  --font-sans: var(--font-ibm-plex-arabic), system-ui, -apple-system, sans-serif;
+
+  /* ✅ ألوان بازاري */
   --color-brand: #0c6679;
   --color-brand-dark: #0a5361;
   --color-brand-light: #e8f4f7;
@@ -24,31 +26,36 @@
 
 html,
 body {
-  font-family: 'Cairo', system-ui, -apple-system, sans-serif;
+  font-family: var(--font-sans);
   background-color: var(--color-bg);
   color: var(--color-text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  /* ✅ IBM Plex Sans Arabic يبدو أفضل مع line-height متوسط */
+  line-height: 1.6;
 }
 
 body {
   min-height: 100vh;
 }
 
+/* ✅ تحسين الأرقام — IBM Plex أرقامه جميلة */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* ─── Scrollbar مخصص ─── */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
-
 ::-webkit-scrollbar-track {
   background: transparent;
 }
-
 ::-webkit-scrollbar-thumb {
   background: #cbd5e1;
   border-radius: 4px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
   background: #94a3b8;
 }
@@ -63,16 +70,26 @@ body {
   outline-offset: 2px;
 }
 
+/* ─── Animations ─── */
 @keyframes spin {
   to { transform: rotate(360deg); }
 }
 
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.4s ease-out;
+}
+
+/* ─── Input number fix ─── */
 input[type='number']::-webkit-inner-spin-button,
 input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-
 input[type='number'] {
   -moz-appearance: textfield;
 }
