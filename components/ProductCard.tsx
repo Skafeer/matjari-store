@@ -24,7 +24,6 @@ export default function ProductCard({ item, code }: ProductCardProps) {
     : item.price;
 
   const isOutOfStock = product.stock <= 0;
-  const isLowStock = product.stock > 0 && product.stock < 5;
 
   const firstCategory = product.category
     ? product.category
@@ -58,8 +57,8 @@ export default function ProductCard({ item, code }: ProductCardProps) {
         href={`/${code}/product/${item.productId}`}
         className="flex flex-col flex-1"
       >
-        {/* ─── Image ─── */}
-        <div className="aspect-[4/3] bg-white relative overflow-hidden">
+        {/* ─── Image — أطول ─── */}
+        <div className="aspect-[4/5] bg-white relative overflow-hidden">
           {img ? (
             <img
               src={img}
@@ -108,27 +107,32 @@ export default function ProductCard({ item, code }: ProductCardProps) {
           )}
         </div>
 
-        {/* ─── Info ─── */}
+        {/* ─── Info — مرتب ومتناسق ─── */}
         <div className="px-3 pt-3 pb-2 flex-1 flex flex-col">
-          {/* Category */}
-          {firstCategory && (
-            <span
-              className="text-[9px] font-semibold self-start px-1.5 py-0.5 rounded mb-1.5 truncate max-w-full"
-              style={{
-                backgroundColor: 'var(--color-brand-light)',
-                color: 'var(--color-brand)',
-              }}
-            >
-              {firstCategory}
-            </span>
-          )}
 
-          {/* Name */}
-          <h3 className="text-[12.5px] font-medium text-gray-800 line-clamp-2 leading-snug mb-2 min-h-[2.2rem]">
+          {/* Category — سطر ثابت */}
+          <div className="h-5 mb-2 flex items-center">
+            {firstCategory ? (
+              <span
+                className="text-[9px] font-semibold px-1.5 py-0.5 rounded truncate max-w-full"
+                style={{
+                  backgroundColor: 'var(--color-brand-light)',
+                  color: 'var(--color-brand)',
+                }}
+              >
+                {firstCategory}
+              </span>
+            ) : (
+              <span className="text-[9px] text-transparent select-none">—</span>
+            )}
+          </div>
+
+          {/* Name — سطرين ثابتين */}
+          <h3 className="text-[12.5px] font-medium text-gray-800 line-clamp-2 leading-[1.5] min-h-[2.4rem] mb-3">
             {product.name}
           </h3>
 
-          {/* Price */}
+          {/* Price — دائماً في الأسفل */}
           <div className="mt-auto flex items-baseline gap-1.5 flex-wrap">
             <span className="text-[15px] font-bold text-gray-900 tabular-nums leading-none">
               {fmt(finalPrice)}
