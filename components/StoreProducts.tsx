@@ -26,7 +26,6 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
     sortBy: 'newest',
   });
 
-  // ── استخراج التصنيفات ──
   const productCategories = useMemo(() => {
     const cats = new Set<string>();
     products.forEach((p: any) => {
@@ -41,7 +40,6 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
     return Array.from(cats);
   }, [products]);
 
-  // ── الفلترة والترتيب ──
   const filtered = useMemo(() => {
     let result = [...products];
 
@@ -108,13 +106,13 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
     !hasQuery && !activeCategory && filtered.length > 0;
 
   return (
-    <div>
+    <div className="w-full">
       {/* ═══════════════════════════════════════════ */}
       {/* ── Search + Filter ── */}
       {/* ═══════════════════════════════════════════ */}
       <div className="mb-8 md:mb-10">
         <div className="flex items-center gap-2.5 md:gap-3 max-w-2xl mx-auto">
-          <div className="relative flex-1">
+          <div className="relative flex-1 min-w-0">
             <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-gray-400 pointer-events-none" />
             <input
               type="text"
@@ -164,7 +162,9 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
           <p className="text-xs text-gray-500 text-center mt-3 animate-fade-in tabular-nums">
             {filtered.length > 0 ? (
               <>
-                <span className="font-bold text-gray-900">{filtered.length}</span>{' '}
+                <span className="font-bold text-gray-900">
+                  {filtered.length}
+                </span>{' '}
                 نتيجة
               </>
             ) : (
@@ -175,12 +175,11 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       </div>
 
       {/* ═══════════════════════════════════════════ */}
-      {/* ── Categories ── */}
+      {/* ── Categories — بدون أي padding أو negative margin ── */}
       {/* ═══════════════════════════════════════════ */}
       {!hasQuery && productCategories.length > 0 && (
-        <div className="mb-12 md:mb-16">
+        <div className="mb-12 md:mb-16 w-full">
           <div className="flex gap-2.5 overflow-x-auto py-1 scrollbar-hide">
-            {/* "الكل" */}
             <button
               onClick={() => setActiveCategory(null)}
               className={`flex-shrink-0 px-5 py-2.5 rounded-xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
@@ -197,7 +196,6 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
               الكل
             </button>
 
-            {/* Categories */}
             {productCategories.map((cat) => {
               const isActive = activeCategory === cat;
               return (
@@ -227,7 +225,7 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       {/* ── Section Title ── */}
       {/* ═══════════════════════════════════════════ */}
       {showSectionTitle && (
-        <div className="flex items-center justify-between mb-5 md:mb-6 px-1">
+        <div className="flex items-center justify-between mb-5 md:mb-6">
           <div className="flex items-center gap-2.5">
             <span
               className="w-1 h-5 rounded-full"
@@ -257,7 +255,7 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
           }}
         />
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5 mb-4 md:mb-8">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5 mb-4 md:mb-8 w-full">
           {filtered.map((item: any, idx: number) => (
             <div
               key={item.id}
@@ -270,7 +268,6 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
         </div>
       )}
 
-      {/* ── Filter Modal ── */}
       <FilterModal
         open={filterModal}
         onClose={() => setFilterModal(false)}

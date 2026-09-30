@@ -17,10 +17,9 @@ export default async function StoreHomePage({
 
   const { products } = data;
 
-  // ─── Empty Store ───
   if (!products || products.length === 0) {
     return (
-      <div className="max-w-lg mx-auto px-5 md:px-6 py-20 md:py-28 text-center animate-fade-in">
+      <div className="mx-auto w-full max-w-lg px-4 sm:px-6 py-20 text-center animate-fade-in">
         <div
           className="w-24 h-24 rounded-3xl flex items-center justify-center mx-auto mb-6"
           style={{ backgroundColor: 'var(--color-brand-light)' }}
@@ -31,31 +30,18 @@ export default async function StoreHomePage({
             strokeWidth={1.5}
           />
         </div>
-        <h2 className="text-2xl font-bold text-gray-900 mb-3 tracking-tight">
+        <h2 className="text-2xl font-bold text-gray-900 mb-3">
           لا توجد منتجات بعد
         </h2>
-        <p className="text-sm text-gray-500 leading-relaxed mb-6 max-w-sm mx-auto">
-          يتم تجهيز المتجر حالياً — عُد إلينا قريباً لاكتشاف المنتجات الجديدة
+        <p className="text-sm text-gray-500 mb-6 max-w-sm mx-auto">
+          يتم تجهيز المتجر حالياً — عُد إلينا قريباً
         </p>
-        <div
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold"
-          style={{
-            backgroundColor: 'var(--color-brand-light)',
-            color: 'var(--color-brand)',
-          }}
-        >
-          <span
-            className="w-2 h-2 rounded-full animate-pulse"
-            style={{ backgroundColor: 'var(--color-brand)' }}
-          />
-          قيد التجهيز
-        </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-5 md:px-6 pt-8 md:pt-12 pb-12 md:pb-20">
+    <div className="mx-auto w-full max-w-6xl px-4 sm:px-6 md:px-8 pt-8 md:pt-12 pb-12 md:pb-20">
       <StoreProducts products={products} code={code} />
     </div>
   );
