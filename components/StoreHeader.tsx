@@ -47,7 +47,7 @@ export default function StoreHeader({
           : 'bg-white border-b border-transparent'
       }`}
     >
-      <div className="max-w-6xl mx-auto px-4 md:px-6 h-16 md:h-20 flex items-center justify-between gap-3">
+      <div className="max-w-6xl mx-auto px-5 md:px-6 h-16 md:h-20 flex items-center justify-between gap-3">
 
         {/* ─── Logo + Name ─── */}
         <Link

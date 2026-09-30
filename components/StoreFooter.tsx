@@ -18,7 +18,7 @@ export default function StoreFooter({ store }: { store: Store }) {
 
   return (
     <footer className="bg-white border-t border-gray-100 mt-20 md:mt-28">
-      <div className="max-w-6xl mx-auto px-4 md:px-6 py-10 md:py-14">
+      <div className="max-w-6xl mx-auto px-5 md:px-6 py-10 md:py-14">
 
         {/* ─── Store Identity ─── */}
         <div className="text-center mb-8 md:mb-10">
