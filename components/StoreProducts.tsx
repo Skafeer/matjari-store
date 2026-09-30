@@ -177,77 +177,78 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       </div>
 
       {/* ═══════════════════════════════════════════ */}
-      {/* ── Categories ── */}
-      {/* ═══════════════════════════════════════════ */}
-      {!hasQuery && productCategories.length > 0 && (
-        <div className="mb-12 md:mb-16">
-          <div className="relative -mx-4 md:-mx-6">
+{/* ── Categories ── */}
+{/* ═══════════════════════════════════════════ */}
+{!hasQuery && productCategories.length > 0 && (
+  <div className="mb-12 md:mb-16">
+    {/* ── Gradient mask wrapper ── */}
+    <div className="relative">
+      {/* Right gradient */}
+      <div
+        className="absolute right-0 top-0 bottom-0 w-10 pointer-events-none z-10"
+        style={{
+          background: 'linear-gradient(to left, var(--bg-page), transparent)',
+        }}
+        aria-hidden="true"
+      />
 
-            {/* Right gradient (RTL start) */}
-            <div
-              className="absolute right-0 top-0 bottom-0 w-12 pointer-events-none z-10"
-              style={{
-                background: 'linear-gradient(to left, var(--bg-page), transparent)',
-              }}
-              aria-hidden="true"
-            />
+      {/* Left gradient */}
+      <div
+        className="absolute left-0 top-0 bottom-0 w-10 pointer-events-none z-10"
+        style={{
+          background: 'linear-gradient(to right, var(--bg-page), transparent)',
+        }}
+        aria-hidden="true"
+      />
 
-            {/* Left gradient (RTL end) */}
-            <div
-              className="absolute left-0 top-0 bottom-0 w-12 pointer-events-none z-10"
-              style={{
-                background: 'linear-gradient(to right, var(--bg-page), transparent)',
-              }}
-              aria-hidden="true"
-            />
+      {/* Pills — scrollable container */}
+      <div
+        className="flex gap-2.5 overflow-x-auto py-2 scrollbar-hide -mx-5 px-5 md:mx-0 md:px-0"
+      >
+        {/* "الكل" */}
+        <button
+          onClick={() => setActiveCategory(null)}
+          className={`flex-shrink-0 px-5 py-3 rounded-2xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
+            activeCategory === null
+              ? 'text-white border-transparent shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]'
+              : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+          }`}
+          style={
+            activeCategory === null
+              ? { backgroundColor: 'var(--color-brand)' }
+              : undefined
+          }
+        >
+          الكل
+        </button>
 
-            {/* Pills scroll container */}
-            <div className="flex gap-3 overflow-x-auto px-6 md:px-8 py-2 scrollbar-hide">
+        {/* Categories */}
+        {productCategories.map((cat) => {
+          const isActive = activeCategory === cat;
 
-              {/* "الكل" */}
-              <button
-                onClick={() => setActiveCategory(null)}
-                className={`flex-shrink-0 px-6 py-3 rounded-2xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
-                  activeCategory === null
-                    ? 'text-white border-transparent shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]'
-                    : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                }`}
-                style={
-                  activeCategory === null
-                    ? { backgroundColor: 'var(--color-brand)' }
-                    : undefined
-                }
-              >
-                الكل
-              </button>
-
-              {/* Categories */}
-              {productCategories.map((cat) => {
-                const isActive = activeCategory === cat;
-
-                return (
-                  <button
-                    key={cat}
-                    onClick={() => setActiveCategory(isActive ? null : cat)}
-                    className={`flex-shrink-0 px-6 py-3 rounded-2xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
-                      isActive
-                        ? 'text-white border-transparent shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]'
-                        : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-                    }`}
-                    style={
-                      isActive
-                        ? { backgroundColor: 'var(--color-brand)' }
-                        : undefined
-                    }
-                  >
-                    {cat}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        </div>
-      )}
+          return (
+            <button
+              key={cat}
+              onClick={() => setActiveCategory(isActive ? null : cat)}
+              className={`flex-shrink-0 px-5 py-3 rounded-2xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
+                isActive
+                  ? 'text-white border-transparent shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]'
+                  : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+              }`}
+              style={
+                isActive
+                  ? { backgroundColor: 'var(--color-brand)' }
+                  : undefined
+              }
+            >
+              {cat}
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+)}
 
       {/* ═══════════════════════════════════════════ */}
       {/* ── Section Title ── */}
