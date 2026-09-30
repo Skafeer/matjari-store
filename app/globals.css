@@ -296,3 +296,14 @@ select {
   --color-brand-dark: var(--store-brand-dark);
   --color-brand-light: var(--store-brand-light);
 }
+
+/* ═══════════════════════════════════════════════════════════════════ */
+/* ── Scrollbar Hide (for horizontal scroll areas) ── */
+/* ═══════════════════════════════════════════════════════════════════ */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -5,6 +5,7 @@ import { getStorePublic } from '@/lib/data';
 import { getColor } from '@/lib/colors';
 import StoreHeader from '@/components/StoreHeader';
 import StoreFooter from '@/components/StoreFooter';
+import WhatsAppButton from '@/components/WhatsAppButton';
 
 export default async function StoreLayout({
   children,
@@ -36,6 +37,14 @@ export default async function StoreLayout({
       <StoreHeader store={data.store} code={code} />
       <main className="flex-1">{children}</main>
       <StoreFooter store={data.store} />
+
+      {/* ✅ زر واتساب العائم */}
+      {data.store.phone && (
+        <WhatsAppButton
+          phone={data.store.phone}
+          storeName={data.store.name}
+        />
+      )}
     </div>
   );
 }

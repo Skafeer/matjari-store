@@ -55,7 +55,7 @@ export default async function StoreHomePage({
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 md:px-6 pt-10 md:pt-14 pb-2">
+    <div className="max-w-6xl mx-auto px-4 md:px-6 pt-8 md:pt-12 pb-4">
       <StoreProducts products={products} code={code} />
     </div>
   );
