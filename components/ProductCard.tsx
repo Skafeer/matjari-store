@@ -6,15 +6,13 @@ import { useState } from 'react';
 import { ShoppingCart, Package, Check } from 'lucide-react';
 import { getFirstImage, fmt } from '@/lib/format';
 import { addToCart } from '@/lib/cart';
-import type { StoreProduct } from '@/lib/types';
 
-export default function ProductCard({
-  item,
-  code,
-}: {
-  item: StoreProduct;
+interface ProductCardProps {
+  item: any;
   code: string;
-}) {
+}
+
+export default function ProductCard({ item, code }: ProductCardProps) {
   const product = item.product;
   const img = getFirstImage(product);
   const [added, setAdded] = useState(false);
@@ -52,7 +50,7 @@ export default function ProductCard({
         href={`/${code}/product/${item.productId}`}
         className="flex flex-col flex-1"
       >
-        {/* ─── Image ─── */}
+        {/* Image */}
         <div className="aspect-square bg-white relative overflow-hidden">
           {img ? (
             <img
@@ -67,7 +65,6 @@ export default function ProductCard({
             </div>
           )}
 
-          {/* Discount Badge */}
           {hasDiscount && (
             <div
               className="absolute top-2.5 right-2.5 px-2 py-1 rounded-lg text-white text-[10px] font-bold shadow-sm tabular-nums"
@@ -77,14 +74,12 @@ export default function ProductCard({
             </div>
           )}
 
-          {/* Low Stock */}
           {isLowStock && !isOutOfStock && (
             <div className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-md bg-amber-500 text-white text-[10px] font-bold shadow-sm">
               متبقي {product.stock}
             </div>
           )}
 
-          {/* Renewable Badge */}
           {product.isRenewable && !isOutOfStock && (
             <div
               className="absolute bottom-2.5 right-2.5 px-2 py-0.5 rounded-md text-[10px] font-bold shadow-sm"
@@ -97,7 +92,6 @@ export default function ProductCard({
             </div>
           )}
 
-          {/* Out of Stock */}
           {isOutOfStock && (
             <div className="absolute inset-0 bg-white/75 backdrop-blur-[2px] flex items-center justify-center">
               <span className="bg-gray-900 text-white text-xs font-bold px-3.5 py-1.5 rounded-full shadow-md">
@@ -107,7 +101,7 @@ export default function ProductCard({
           )}
         </div>
 
-        {/* ─── Info ─── */}
+        {/* Info */}
         <div className="px-3.5 pt-3.5 pb-1 flex-1">
           <h3 className="text-[13px] font-semibold text-gray-900 line-clamp-2 leading-snug min-h-[2.3rem]">
             {product.name}
@@ -115,7 +109,7 @@ export default function ProductCard({
         </div>
       </Link>
 
-      {/* ─── Bottom: Price + Add ─── */}
+      {/* Bottom */}
       <div className="px-3.5 pb-3.5 pt-2 flex items-end justify-between gap-2">
         <div className="flex items-baseline gap-1 min-w-0 flex-wrap">
           <span className="text-base md:text-[17px] font-bold text-gray-900 tabular-nums leading-none tracking-tight">

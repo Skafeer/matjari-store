@@ -5,13 +5,12 @@ import { useState, useMemo } from 'react';
 import { Search, X, Package } from 'lucide-react';
 import ProductCard from './ProductCard';
 
-export default function StoreProducts({
-  products,
-  code,
-}: {
+interface StoreProductsProps {
   products: any[];
   code: string;
-}) {
+}
+
+export default function StoreProducts({ products, code }: StoreProductsProps) {
   const [query, setQuery] = useState('');
 
   const filtered = useMemo(() => {
@@ -26,10 +25,8 @@ export default function StoreProducts({
 
   return (
     <div>
-      {/* ═══════════════════════════════════════════ */}
       {/* ── Search ── */}
-      {/* ═══════════════════════════════════════════ */}
-      <div className="mb-10 md:mb-14">
+      <div className="mb-10 md:mb-12">
         <div className="relative max-w-xl mx-auto">
           <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400 pointer-events-none" />
 
@@ -42,7 +39,6 @@ export default function StoreProducts({
             dir="rtl"
           />
 
-          {/* Clear button */}
           {hasQuery && (
             <button
               onClick={() => setQuery('')}
@@ -54,7 +50,6 @@ export default function StoreProducts({
           )}
         </div>
 
-        {/* Search results count */}
         {hasQuery && (
           <p className="text-xs text-gray-500 text-center mt-3 animate-fade-in tabular-nums">
             {filtered.length > 0 ? (
@@ -69,13 +64,31 @@ export default function StoreProducts({
         )}
       </div>
 
-      {/* ═══════════════════════════════════════════ */}
+      {/* ── Section Title ── */}
+      {!hasQuery && filtered.length > 0 && (
+        <div className="flex items-center justify-between mb-6 md:mb-8 px-1">
+          <div className="flex items-center gap-2.5">
+            <span
+              className="w-1 h-6 rounded-full"
+              style={{ backgroundColor: 'var(--color-brand)' }}
+              aria-hidden="true"
+            />
+            <h2 className="text-lg md:text-xl font-bold text-gray-900 tracking-tight">
+              المنتجات
+            </h2>
+          </div>
+
+          <span className="text-xs md:text-sm text-gray-500 font-medium tabular-nums">
+            {filtered.length} منتج
+          </span>
+        </div>
+      )}
+
       {/* ── Products / Empty ── */}
-      {/* ═══════════════════════════════════════════ */}
       {filtered.length === 0 ? (
         <EmptySearch query={query} onClear={() => setQuery('')} />
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5 mb-12 md:mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 md:gap-4 lg:gap-5 mb-4 md:mb-8">
           {filtered.map((item, idx) => (
             <div
               key={item.id}
@@ -91,9 +104,6 @@ export default function StoreProducts({
   );
 }
 
-// ═══════════════════════════════════════════
-// ── Empty Search State ──
-// ═══════════════════════════════════════════
 function EmptySearch({
   query,
   onClear,
