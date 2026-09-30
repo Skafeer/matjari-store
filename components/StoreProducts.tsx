@@ -26,9 +26,9 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
     sortBy: 'newest',
   });
 
-  // ── استخراج التصنيفات مع عدد المنتجات ──
+  // ── استخراج التصنيفات ──
   const productCategories = useMemo(() => {
-    const map = new Map<string, number>();
+    const cats = new Set<string>();
     products.forEach((p: any) => {
       const productCats: string[] = p.product.category
         ? p.product.category
@@ -36,14 +36,9 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
             .map((c: string) => c.trim())
             .filter((c: string) => c && c !== 'عام')
         : [];
-      productCats.forEach((c) => {
-        map.set(c, (map.get(c) || 0) + 1);
-      });
+      productCats.forEach((c) => cats.add(c));
     });
-    return Array.from(map.entries()).map(([name, count]) => ({
-      name,
-      count,
-    }));
+    return Array.from(cats);
   }, [products]);
 
   // ── الفلترة والترتيب ──
@@ -121,7 +116,7 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       {/* ═══════════════════════════════════════════ */}
       {/* ── Search + Filter ── */}
       {/* ═══════════════════════════════════════════ */}
-      <div className="mb-6 md:mb-8">
+      <div className="mb-8 md:mb-10">
         <div className="flex items-center gap-2.5 md:gap-3 max-w-2xl mx-auto">
           <div className="relative flex-1">
             <Search className="absolute right-4 top-1/2 -translate-y-1/2 w-[18px] h-[18px] text-gray-400 pointer-events-none" />
@@ -182,77 +177,77 @@ export default function StoreProducts({ products, code }: StoreProductsProps) {
       </div>
 
       {/* ═══════════════════════════════════════════ */}
-{/* ── Categories ── */}
-{/* ═══════════════════════════════════════════ */}
-{!hasQuery && productCategories.length > 0 && (
-  <div className="mb-12 md:mb-16">
-    <div className="relative -mx-4 md:mx-0">
+      {/* ── Categories ── */}
+      {/* ═══════════════════════════════════════════ */}
+      {!hasQuery && productCategories.length > 0 && (
+        <div className="mb-12 md:mb-16">
+          <div className="relative -mx-4 md:-mx-6">
 
-      {/* Right gradient (RTL start) */}
-      <div
-        className="absolute right-0 top-0 bottom-0 w-10 pointer-events-none z-10"
-        style={{
-          background: 'linear-gradient(to left, var(--bg-page), transparent)',
-        }}
-        aria-hidden="true"
-      />
+            {/* Right gradient (RTL start) */}
+            <div
+              className="absolute right-0 top-0 bottom-0 w-12 pointer-events-none z-10"
+              style={{
+                background: 'linear-gradient(to left, var(--bg-page), transparent)',
+              }}
+              aria-hidden="true"
+            />
 
-      {/* Left gradient (RTL end) */}
-      <div
-        className="absolute left-0 top-0 bottom-0 w-10 pointer-events-none z-10"
-        style={{
-          background: 'linear-gradient(to right, var(--bg-page), transparent)',
-        }}
-        aria-hidden="true"
-      />
+            {/* Left gradient (RTL end) */}
+            <div
+              className="absolute left-0 top-0 bottom-0 w-12 pointer-events-none z-10"
+              style={{
+                background: 'linear-gradient(to right, var(--bg-page), transparent)',
+              }}
+              aria-hidden="true"
+            />
 
-      {/* Pills */}
-      <div className="flex gap-3 overflow-x-auto px-6 md:px-1 py-2 scrollbar-hide">
+            {/* Pills scroll container */}
+            <div className="flex gap-3 overflow-x-auto px-6 md:px-8 py-2 scrollbar-hide">
 
-        {/* "الكل" */}
-        <button
-          onClick={() => setActiveCategory(null)}
-          className={`flex-shrink-0 px-6 py-2.5 rounded-2xl text-[13px] font-bold transition-all duration-200 active:scale-95 border ${
-            activeCategory === null
-              ? 'text-white border-transparent shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]'
-              : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-          }`}
-          style={
-            activeCategory === null
-              ? { backgroundColor: 'var(--color-brand)' }
-              : undefined
-          }
-        >
-          الكل
-        </button>
+              {/* "الكل" */}
+              <button
+                onClick={() => setActiveCategory(null)}
+                className={`flex-shrink-0 px-6 py-3 rounded-2xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
+                  activeCategory === null
+                    ? 'text-white border-transparent shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]'
+                    : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                }`}
+                style={
+                  activeCategory === null
+                    ? { backgroundColor: 'var(--color-brand)' }
+                    : undefined
+                }
+              >
+                الكل
+              </button>
 
-        {/* Categories */}
-        {productCategories.map((cat) => {
-          const isActive = activeCategory === cat.name;
+              {/* Categories */}
+              {productCategories.map((cat) => {
+                const isActive = activeCategory === cat;
 
-          return (
-            <button
-              key={cat.name}
-              onClick={() => setActiveCategory(isActive ? null : cat.name)}
-              className={`flex-shrink-0 px-6 py-2.5 rounded-2xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
-                isActive
-                  ? 'text-white border-transparent shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]'
-                  : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
-              }`}
-              style={
-                isActive
-                  ? { backgroundColor: 'var(--color-brand)' }
-                  : undefined
-              }
-            >
-              {cat.name}
-            </button>
-          );
-        })}
-      </div>
-    </div>
-  </div>
-)}
+                return (
+                  <button
+                    key={cat}
+                    onClick={() => setActiveCategory(isActive ? null : cat)}
+                    className={`flex-shrink-0 px-6 py-3 rounded-2xl text-[13px] font-bold whitespace-nowrap transition-all duration-200 active:scale-95 border ${
+                      isActive
+                        ? 'text-white border-transparent shadow-[0_4px_12px_-4px_rgba(12,102,121,0.4)]'
+                        : 'bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50'
+                    }`}
+                    style={
+                      isActive
+                        ? { backgroundColor: 'var(--color-brand)' }
+                        : undefined
+                    }
+                  >
+                    {cat}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* ═══════════════════════════════════════════ */}
       {/* ── Section Title ── */}
